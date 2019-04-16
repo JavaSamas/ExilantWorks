@@ -1,0 +1,102 @@
+
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+
+import oshi.SystemInfo;
+import oshi.hardware.CentralProcessor;
+import oshi.hardware.HardwareAbstractionLayer;
+
+public class GreetingServer extends Thread{
+
+    private Socket s=null;
+	private static ServerSocket ss=null;
+	String str;
+
+	public static void main(String[] args) throws InterruptedException {
+		try {
+			ss=new ServerSocket(5406);
+			
+			Thread.sleep(1000);
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		Thread t=new GreetingServer();
+		t.start();
+		System.out.println("Done");
+	}
+	public void run() {
+		try {
+			s=new Socket("localhost",5406);
+			s=ss.accept();
+			System.out.println(s);
+				
+			/**BufferedReader in=new BufferedReader(new InputStreamReader(s.getInputStream()));
+			String inputLine = in.readLine();
+			System.out.println(inputLine.toString());
+			if(inputLine!=null) {
+				str=str+inputLine;
+				System.out.println(str);
+				s.close();
+			}**/
+			SystemInfo si=new SystemInfo();
+			HardwareAbstractionLayer ha1=si.getHardware();
+			CentralProcessor processor=ha1.getProcessor();
+			long[] prevTick=processor.getSystemCpuLoadTicks();
+			
+			System.out.println(prevTick);
+			
+			
+		}catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+EXECUTOR SERVICE:-
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ExecutorServiceExample {
+	
+	public static void main(String[] args) {
+		ExecutorService executor=Executors.newFixedThreadPool(4);
+			Runnable worker1=new MyRunnable1();
+			Runnable worker2=new MyRunnable2();
+			
+			
+			executor.execute(worker1);
+			executor.execute(worker2);
+	
+	}
+
+}
+
+
+public class MyRunnable1 implements Runnable {
+	@Override
+	public void run() {		
+		for(int i=0;i<5;i++) {
+			System.out.println("MyRunnable1 Task :"+i);
+		}
+		
+	}
+}
+
+public class MyRunnable2 implements Runnable {
+	@Override
+	public void run() {		
+		for(int i=0;i<5;i++) {
+			System.out.println("MyRunnable2 Task :"+i);
+		}
+		
+	}
+}
